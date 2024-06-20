@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <title>Dianella Secondary College Signature Generator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <style type="text/css">
+        body {
+            padding: 10px;
+        }
+
+        #generate-form {
+            width: 300px;
+        }
+
+        #output {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 mt-5">
+                <h1 class="display-2">Signature Generator</h1>
+                <h2 class="text-muted mb-4">Dianella Secondary College</h2>
+                <h3>Enter Details</h3>
+                <form class="form" id="generate-form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="name-input" placeholder="Name" />
+                        <input type="text" class="form-control" id="title-input" placeholder="Title" />
+                        <input type="email" class="form-control" id="email-input" placeholder="Email" />
+                        <input type="tel" class="form-control" id="phone-input" placeholder="Phone" />
+                        <input type="tel" class="form-control" id="mobile-input" placeholder="Mobile - Optional" />
+                    </div>
+
+                    <button type="button" class="btn btn-primary mb-4" id="generate-button">Generate Signature</button>
+                </form>
+
+                <div id="output">
+                </div>
+
+                <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+
+                <script type="text/javascript">
+                    $(function () {
+                        var mobileTemplate = 
+                            '<span style="color: black;">//</span>&nbsp;<span style="color: rgb(49, 16, 54);">Mobile:</span>&nbsp;<span style="color: rgb(102, 102, 102);">{mobile}</span>&nbsp;';
+                    
+                        var signatureTemplate =
+                            '<p>Select and copy the outputted text below. Paste into Outlook&#39;s signature settings.</p><hr>\n' +
+                            '<p style="font-family: Arial, sans-serif; margin: 0px; color: rgb(129, 98, 170); font-weight: bold; font-size: 13pt;">{name}</p>\n' + 
+                            '<p style="font-family: Arial, sans-serif; margin: 0px; color: rgb(68, 68, 68); font-weight: bold; font-size: 10pt;">{title}</p>\n' + 
+                            '<p style="margin: 0px; font-size: 13px; background-color: rgb(255, 255, 255);">&nbsp;</p>\n' + 
+                            '<p style="font-family: Arial, sans-serif; margin: 0px; color: rgb(34, 34, 34); font-size: 10pt;">\n' + 
+                            '<span style="color: rgb(49, 16, 54);">Phone:</span>&nbsp;<span style="color: rgb(102, 102, 102);">{phone}</span>&nbsp;{mobile}</p>\n' + 
+                            '<p style="font-family: Arial, sans-serif; margin: 0px; color: rgb(34, 34, 34); font-size: 10pt;">\n' + 
+                            '<span style="color: rgb(49, 16, 54);">Email:</span>&nbsp;<span style="color: rgb(102, 102, 102);"><a style="color: rgb(102, 102, 102);" href="mailto:{email}">{email}</a></span></p>\n' + 
+
+                            '<a href="http://dsc.wa.edu.au/" target="_blank"><img src="http://www.dsc.wa.edu.au/uploads/1/0/2/2/102204216/dsc-logohorizontal-colour-246x97_orig.gif"></a>\n' + 
+                            '<p style="font-family: Arial, sans-serif; margin: 0px; color: rgb(34, 34, 34); font-size: 8pt;">\n' + 
+                            '    <span style="color: rgb(49, 16, 54);">Website:</span>&nbsp;<span style="color: rgb(102, 102, 102);"><a style="color: rgb(102, 102, 102);" href="http://dsc.wa.edu.au" target="_blank">http://dsc.wa.edu.au</a></span>&nbsp;<span style="color: black;">//</span>&nbsp;<span style="color: rgb(49, 16, 54);">Phone:</span>&nbsp;<span style="color: rgb(102, 102, 102);">(08) 9345 9200</span>&nbsp;<span style="color: black;">//</span>&nbsp;<span style="color: rgb(49, 16, 54);">Fax:</span>&nbsp;<span style="color: rgb(102, 102, 102);">(08) 9345 9245</span></p>\n' + 
+                            '<p style="font-family: Arial, sans-serif; margin: 0px; color: rgb(34, 34, 34); font-size: 8pt;">\n' + 
+                            '    <span style="color: rgb(49, 16, 54);">Address:</span>&nbsp;<span style="color: rgb(102, 102, 102);"><a style="color: rgb(102, 102, 102);" href="https://goo.gl/maps/EA1yL9WoqECNaZgk9" target="_blank">180 Nollamara Ave, Dianella WA 6059</a></span></p>\n' + 
+                            '<a href="https://www.facebook.com/DianellaSecondaryCollege/" target="_blank"><img src="http://www.dsc.wa.edu.au/uploads/1/0/2/2/102204216/dscorange-social-icons-facebook_orig.gif"></a>\n' + 
+                            '<a href="https://instagram.com/DianellaSecondaryCollege" target="_blank"><img src="http://www.dsc.wa.edu.au/uploads/1/0/2/2/102204216/dscorange-social-icons-instagram_orig.gif"></a>\n' + 
+                            '<p style="font-family: Arial, sans-serif; margin: 0px; color: rgb(34, 34, 34); font-size: 8pt;">\n' + 
+                            '    <span style="color: rgb(102, 102, 102);">I acknowledge and respect the Whadjuk Noongar people, the traditional custodians of the boodja (land) on which I work and live. I recognise their continuing connection to the boodja, bilya (rivers), ngamma (waterholes) and karda (hills) and I pay my respects to their Elders past,  present and emerging.</span></p>';
+                        
+                        var output = $("#output");
+                        var nameInput = $("#name-input");
+                        var titleInput = $("#title-input");
+                        var emailInput = $("#email-input");
+                        var phoneInput = $("#phone-input");
+                        var mobileInput = $("#mobile-input");
+
+                        $("#generate-button").click(generateSignature);
+
+                        function generateSignature() {
+                            var name = nameInput.val().trim();
+                            var title = titleInput.val().trim();
+                            var email = emailInput.val().trim();
+                            var phone = phoneInput.val().trim();
+                            var mobileNumber = mobileInput.val().trim();
+
+                            
+                            var mobile;
+                            
+                            if(isNullOrWhiteSpace(mobileNumber))
+                                mobile = "";
+                            else
+                                mobile = mobileTemplate.replace(/{mobile}/g, mobileNumber);
+
+                            var signature = signatureTemplate
+                                .replace(/{name}/g, name)
+                                .replace(/{title}/g, title)
+                                .replace(/{email}/g, email)
+                                .replace(/{phone}/g, phone)
+                                .replace(/{mobile}/g, mobile);
+
+                            output.html(signature);
+                        };
+                        
+                        function isNullOrWhiteSpace(input) {
+                            if (typeof input === 'undefined' || input == null) return true;
+
+                            return input.replace(/\s/g, '').length < 1;
+                        }
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
